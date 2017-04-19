@@ -5,11 +5,13 @@
  */
 package kakuro;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Juan
  */
-public class casillaMatriz {
+public class casillaMatriz implements Serializable {
     private int numero;
     private int abajo;
     private int derecha;
