@@ -8,12 +8,13 @@ package kakuro;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  *
  * @author Juan
  */
-public class Tablero {
+public class Tablero implements Serializable{
     
     
     private casillaMatriz[][] tablero;
