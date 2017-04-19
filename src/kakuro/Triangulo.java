@@ -5,11 +5,13 @@
  */
 package kakuro;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Juan
  */
-public class Triangulo {
+public class Triangulo implements Serializable{
     private int objetivo;
     private int actual;
     private listaPresencia presentes;
