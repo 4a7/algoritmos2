@@ -5,6 +5,7 @@
  */
 package kakuro;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Arrays;
  * @author Juan
  */
 //tiene la informacion de la presencia de un numero en una columna o fila
-public class listaPresencia {
+public class listaPresencia implements Serializable{
     private boolean [] lista={false,false,false,false,false,false,false,false,false};
     
     public void setAllFalse(){
