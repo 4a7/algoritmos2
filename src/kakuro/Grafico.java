@@ -22,9 +22,24 @@ public class Grafico {
         grafico.add(new CasillaGrafico(tiempo,numero));
     }
     public void imprimir(){
+        long primero=grafico.get(0).getTiempo();
         String salida="";
         for(CasillaGrafico c:grafico){
-            System.out.println(/*c.getTiempo()+" "+*/c.getCasillas());
+            System.out.println(c.getTiempo()-primero);
         }
+        System.out.println("\n\n\n\n\n\n\n\n");
+        System.out.println("***************************************************");
+        System.out.println("***************************************************");
+        System.out.println("***************************************************");
+        System.out.println("***************************************************");
+        System.out.println("***************************************************");
+        System.out.println("\n\n\n\n\n\n\n\n");
+        for(CasillaGrafico c:grafico){
+            System.out.println(c.getCasillas());
+        }
+    }
+    
+    public long getStartTime(){
+        return grafico.get(0).getTiempo();
     }
 }
