@@ -5,6 +5,11 @@
  */
 package kakuro;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  *
  * @author Juan
@@ -14,7 +19,8 @@ public class BT{
     static boolean forks=false;
     static Grafico grafico=new Grafico();
     public static void solve(int i,int j,Tablero t){
-        grafico.addCasilla(i, j);
+        //System.out.println("gniblos "+i+" "+j);
+        //t=(Tablero)ThreadBT.deepClone(t);
         boolean condicion1,condicion2,condicion3,condicion4;
         casillaMatriz siguiente,abajo;
         if(j==14){
@@ -24,7 +30,17 @@ public class BT{
         if(i==14){
             System.out.println("<<Solucion>>");
             t.toString();
-            grafico.imprimir();
+            long fin=System.nanoTime();
+            System.out.println(grafico.getStartTime()/1000000);
+            System.out.println(fin/1000000);
+            System.out.println((fin-grafico.getStartTime())/1000000);
+            
+            /*
+            synchronized(grafico){
+                grafico.imprimir();
+            }
+            */
+            
             return ;
         }
         casillaMatriz cm=t.getCasillaMatriz(i, j);
@@ -48,18 +64,24 @@ public class BT{
                 solve(i,j+1,t);
             }
             */
-            solve(i,j+1,t);
+            //t=(Tablero)ThreadBT.deepClone(t);
+            //solve(i,j+1,t);
+            Tablero w=(Tablero)ThreadBT.deepClone(t);
+            solve(i,j+1,w);
             
         }
         else if(cm.isTriangulo()){
             //System.out.println("Triangulo: "+i+" "+j);
-            solve(i,j+1,t);
+            //solve(i,j+1,t);
+            Tablero w=(Tablero)ThreadBT.deepClone(t);
+            solve(i,j+1,w);
         }
         else{
             abajo=t.getAbajo(i, j);
             siguiente=t.getSiguiente(i, j);
             for(int k=1;k<10;k++){
                 //System.out.println("Numero: "+i+" "+j+" "+k);
+                
                 condicion1=!t.getSuma(i, j).isInAbajo(k);
                 condicion2=!t.getSuma(i, j).isInDerecha(k);
                 if(siguiente.isNumeral()){
@@ -77,30 +99,41 @@ public class BT{
                 //System.out.println("ID: "+t.getSuma(i, j).getDerecha()+" Numero: "+i+" "+j+" "+k+" Sumas: d/a "+t.getSuma(i, j).getObjetivoDerecha()+" "+t.getSuma(i, j).getObjetivoAbajo()+" "+t.getSuma(i, j).getActualDerecha()+" "+t.getSuma(i, j).getActualAbajo()+/*t.getSuma(i, j)+" "+info.getSumaHorizontal(i)+" "+k+*/"  Condiciones: "+condicion1+" "+condicion2+" "+condicion3+" "+condicion4);
                 //si se cumplen las condiciones de poda
                 if(condicion1&&condicion2&&condicion3&&condicion4){
+                    synchronized(grafico){
+                        grafico.addCasilla(i, j);
+                    }
                     t.getSuma(i, j).sumarActualAbajo(k);
                     t.getSuma(i, j).sumarActualDerecha(k);
                     t.setCasillaMatriz(i, j, k);
                     //System.out.println("TABLERO: "+i+" "+j);
                     //t.toString();
+                    //System.out.println(forks_hilos+" "+forks);
+                   
                     if(forks_hilos>0){
                         if(forks){
                             //mientras no se tengan forks
                             solve(i,j+1,t);
                         }
                         else{
+                            
                             ThreadBT tbt=new ThreadBT(i,j+1,t);
                             forks_hilos--;
                             tbt.start();
-                            //solve(i,j+1,t);
+                            
                         }
                     }
                     else{
-                        solve(i,j+1,t);
+                        //t=(Tablero)ThreadBT.deepClone(t);
+                        //solve(i,j+1,t);
+                        Tablero w=(Tablero)ThreadBT.deepClone(t);
+                        solve(i,j+1,w);
                     }
+                    
                     t.setCasillaMatriz(i, j, 0);
                     t.getSuma(i, j).restarActualAbajo(k);
                     t.getSuma(i, j).restarActualDerecha(k);
                 }
+                    
             }
         } 
     }
@@ -120,10 +153,36 @@ class ThreadBT extends Thread{
     public ThreadBT(int i,int j,Tablero t){
         this.i=i;
         this.j=j;
-        this.t=t;
+        
+        this.t=(Tablero)deepClone(t);
     }
     @Override
     public void run(){
+        //System.out.println("Solving "+i+" "+j);
         BT.solve(i, j, t);
     }
+    
+    public static Object deepClone(Object object) {
+        
+        try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          ObjectOutputStream oos = new ObjectOutputStream(baos);
+          oos.writeObject(object);
+          ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais);
+          return ois.readObject();
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+          return object;
+        }
+        
+        /*
+        XStream x = new XStream(new StaxDriver());
+        Object myClone = x.fromXML(x.toXML(object));
+        return myClone;
+        */
+      }
 }
+
+
