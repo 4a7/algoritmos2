@@ -18,11 +18,15 @@ public class Kakuro {
         // TODO code application logic here
         Informacion info =new Informacion();
         Tablero t=new Tablero();
-        //BT.setFH(10);
+        
+        BT.setFH(75);
         t.readTablero("C:\\users\\juan\\desktop\\kakuro1.txt");
         t.toString();
+        //new BT().solve(0,0, t);
         BT.solve(0, 0, t);
+        
         //System.out.println(t.toString());
     }
+
     
 }
