@@ -18,12 +18,16 @@ public class BT{
     static int forks_hilos=0;     //lleva la cuenta de cuantos se han hecho para asi no hacer mas 
     static boolean forks=false;
     static Grafico grafico=new Grafico();
+    static int ix,iy;
     public static boolean solve(int i,int j,Tablero t){
         //System.out.println("gniblos "+i+" "+j);
         boolean a=false;
         //t=(Tablero)ThreadBT.deepClone(t);
         boolean condicion1,condicion2,condicion3,condicion4;
         casillaMatriz siguiente,abajo;
+        if(j==iy && i==ix){
+            return true;
+        }
         if(j==14){
             j=0;
             i++;
@@ -128,6 +132,10 @@ public class BT{
     public static void setForks(boolean t){
         forks=t;
     }
+    public static void setMaxXY(int x,int y){
+        ix=x-1;
+        iy=y-1;
+    }
 }
 
 class ThreadBT extends Thread{
@@ -167,6 +175,8 @@ class ThreadBT extends Thread{
         return myClone;
         */
       }
+    
+    
 }
 
 
