@@ -22,7 +22,7 @@ public class Kakuro {
         Informacion info =new Informacion();
         Tablero t=new Tablero();
         //BT2 bt2=new BT2();
-        BT2.setFH(100);
+        BT2.setFH(5);
         BT2.setForks(true);
         t.readTablero("C:\\users\\juan\\desktop\\kakuro1.txt");
         t.toString();
