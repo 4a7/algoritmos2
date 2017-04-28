@@ -30,6 +30,7 @@ public class BT2 extends RecursiveTask<Void>{
     private Tablero t;
     String tab;
     Grafico grafico;
+    private static ForkJoinPool mainPool;
     public BT2(int i,int j,Tablero t,boolean[][]presencia_filas,boolean[][]presencia_columnas,int[]suma_filas,int[]suma_columnas,String tab,Grafico grafico){
         this.i=i;
         this.j=j;
@@ -40,6 +41,7 @@ public class BT2 extends RecursiveTask<Void>{
         this.tab=tab;
         this.t=(t);
         this.grafico=grafico;
+        mainPool=new ForkJoinPool(forks_hilos);
     }
     @Override
     protected Void compute(){
@@ -64,11 +66,12 @@ public class BT2 extends RecursiveTask<Void>{
             System.out.println(fin/1000000);
             System.out.println((fin-grafico.getStartTime())/1000000);
             
-            /*
+            
             synchronized(grafico){
                 grafico.imprimir();
             }
-            */
+            
+            
             
             return ;
         }
@@ -166,13 +169,14 @@ public class BT2 extends RecursiveTask<Void>{
                         if(forks){
                             //mientras no se tengan forks
                             //System.out.println("FORKS "+forks_hilos);
-                            ForkJoinPool.commonPool().invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico));
-                            forks_hilos--;
+                            //ForkJoinPool.commonPool().invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico));
+                            mainPool.invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico));
+                            //forks_hilos--;
                             //new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico).solve();
                             //solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico);
                         }
                         else{
-                            System.out.println("NOFORKS "+forks_hilos);
+                            //System.out.println("NOFORKS "+forks_hilos);
                             //new Thread(() -> solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ")).start();
                             new ThreadBT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico).start();
                         }
