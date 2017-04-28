@@ -18,7 +18,7 @@ public class Grafico {
     }
     public void addCasilla(int i,int j){
         int numero=(i*14)+j;
-        long tiempo=System.nanoTime();
+        long tiempo=(System.nanoTime())/1000000;
         grafico.add(new CasillaGrafico(tiempo,numero));
     }
     public void imprimir(){
