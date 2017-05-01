@@ -22,9 +22,13 @@ public class Kakuro {
         Informacion info =new Informacion();
         Tablero t=new Tablero();
         //BT2 bt2=new BT2();
-        BT2.setFH(5);
-        BT2.setForks(true);
-        t.readTablero("C:\\users\\juan\\desktop\\kakuro1.txt");
+        //esta pone el numero de forks o hilos que se quieren
+        //BT2.setFH(5);
+        //esta se pone true si se quieren forks
+        //funciona en conjunto con la anterior, si con BT.setFH se pone mas de 1 hilo, entonces el programa 
+        //usara hilos o forks, para saber cual usar usa BT2.setForks, si es verdadera entonces se usan forks, sino entonces hilos
+        //BT2.setForks(true);
+        t.readTablero("C:\\users\\juan\\desktop\\kakuro1.txt");//el path del tablero
         t.toString();
         boolean[][]presencia_filas=new boolean[14][9];
         boolean[][]presencia_columnas=new boolean[14][9];
@@ -42,7 +46,7 @@ public class Kakuro {
         
  
         
-        new BT2(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico).solve();
+        new BT2(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico,"").solve();
        //new BT2().solve(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico);
         
         //System.out.println(t.toString());
