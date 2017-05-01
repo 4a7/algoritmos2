@@ -18,7 +18,7 @@ import java.util.concurrent.RecursiveTask;
  * @author Juan
  */
 public class BT2 extends RecursiveTask<Void>{
-    static int forks_hilos=0;     //lleva la cuenta de cuantos se han hecho para asi no hacer mas 
+    static int forks_hilos=1;     //lleva la cuenta de cuantos se han hecho para asi no hacer mas 
     static boolean forks=false;
     //static Grafico grafico=new Grafico();;
     private int i;
@@ -29,9 +29,10 @@ public class BT2 extends RecursiveTask<Void>{
     int[]suma_columnas;
     private Tablero t;
     String tab;
+    String arch;
     Grafico grafico;
     private static ForkJoinPool mainPool;
-    public BT2(int i,int j,Tablero t,boolean[][]presencia_filas,boolean[][]presencia_columnas,int[]suma_filas,int[]suma_columnas,String tab,Grafico grafico){
+    public BT2(int i,int j,Tablero t,boolean[][]presencia_filas,boolean[][]presencia_columnas,int[]suma_filas,int[]suma_columnas,String tab,Grafico grafico,String arch){
         this.i=i;
         this.j=j;
         this.presencia_filas=presencia_filas;
@@ -39,6 +40,7 @@ public class BT2 extends RecursiveTask<Void>{
         this.suma_filas=suma_filas;
         this.suma_columnas=suma_columnas;
         this.tab=tab;
+        this.arch=arch;
         this.t=(t);
         this.grafico=grafico;
         mainPool=new ForkJoinPool(forks_hilos);
@@ -56,21 +58,23 @@ public class BT2 extends RecursiveTask<Void>{
             j=0;
             i++;
             tab+="\n";
+            arch+="\n";
         }
         if(i==14){
             System.out.println("<<Solucion>>");
             //t.toString();
             System.out.println(tab);
+            System.out.println(arch);
             long fin=System.nanoTime();
             System.out.println(grafico.getStartTime()/1000000);
             System.out.println(fin/1000000);
             System.out.println((fin-grafico.getStartTime())/1000000);
             
-            
+            /*
             synchronized(grafico){
                 grafico.imprimir();
             }
-            
+            */
             
             
             return ;
@@ -106,7 +110,7 @@ public class BT2 extends RecursiveTask<Void>{
             tab+="■ ";
             //System.out.println("Fila Columna "+i+" "+j+" es negra");
             //solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico);
-            new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico).solve();
+            new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico,arch+"b ").solve();
             
             
         }
@@ -117,10 +121,14 @@ public class BT2 extends RecursiveTask<Void>{
             Arrays.fill(presencia_filas[i],false);
             Arrays.fill(presencia_columnas[j],false);
             suma_filas[i]=0;
+            int a,d;
+            a=cm.getAbajo();
+            d=cm.getDerecha();
+            String ab="e "+Integer.toString(a)+" "+Integer.toString(d)+" ";
             suma_columnas[j]=0;
             //System.out.println("Fila Columna "+i+" "+j+" es triangulo ");
             tab+="\\ ";
-            new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico).solve();
+            new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico,arch+ab).solve();
         }
         else{
             abajo=t.getAbajo(i, j);
@@ -165,12 +173,12 @@ public class BT2 extends RecursiveTask<Void>{
                     //System.out.println("TABLERO: "+i+" "+j);
                     //t.toString();
                     //System.out.println(forks_hilos+" "+forks);
-                    if((Thread.activeCount()<forks_hilos&&!forks)||forks_hilos>0){
+                    if((Thread.activeCount()<forks_hilos&&!forks)||forks_hilos>1){
                         if(forks){
                             //mientras no se tengan forks
                             //System.out.println("FORKS "+forks_hilos);
                             //ForkJoinPool.commonPool().invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico));
-                            mainPool.invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico));
+                            mainPool.invoke(new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico,arch+Integer.toString(k)+" "));
                             //forks_hilos--;
                             //new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico).solve();
                             //solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab,grafico);
@@ -178,13 +186,13 @@ public class BT2 extends RecursiveTask<Void>{
                         else{
                             //System.out.println("NOFORKS "+forks_hilos);
                             //new Thread(() -> solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ")).start();
-                            new ThreadBT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico).start();
+                            new ThreadBT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico,arch+Integer.toString(k)+" ").start();
                         }
                     }
                     else{
                         //t=(Tablero)ThreadBT.deepClone(t);
                         //solve(i,j+1,t);
-                        new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico).solve();
+                        new BT2(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico,arch+Integer.toString(k)+" ").solve();
                         //solve(i,j+1,t,deepCopyPresencia(presencia_filas),deepCopyPresencia(presencia_columnas),deepCopySuma(suma_filas),deepCopySuma(suma_columnas),tab+Integer.toString(k)+" ",grafico);
                     }
                     
@@ -244,9 +252,10 @@ class ThreadBT2 extends Thread{
     int[]suma_filas;
     int[]suma_columnas;
     private Tablero t;
+    String arch;
     String tab;
     Grafico grafico;
-    public ThreadBT2(int i,int j,Tablero t,boolean[][]presencia_filas,boolean[][]presencia_columnas,int[]suma_filas,int[]suma_columnas,String tab,Grafico grafico){
+    public ThreadBT2(int i,int j,Tablero t,boolean[][]presencia_filas,boolean[][]presencia_columnas,int[]suma_filas,int[]suma_columnas,String tab,Grafico grafico,String arch){
         this.i=i;
         this.j=j;
         this.presencia_filas=presencia_filas;
@@ -254,12 +263,13 @@ class ThreadBT2 extends Thread{
         this.suma_filas=suma_filas;
         this.suma_columnas=suma_columnas;
         this.tab=tab;
+        this.arch=arch;
         this.t=(t);
         this.grafico=grafico;
     }
     @Override
     public void run(){
-        new BT2(i, j, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,tab,grafico).solve();
+        new BT2(i, j, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,tab,grafico,arch).solve();
     }
     
     public static Object deepClone(Object object) {
