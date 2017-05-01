@@ -64,7 +64,9 @@ public class BT2 extends RecursiveTask<Void>{
             System.out.println("<<Solucion>>");
             //t.toString();
             System.out.println(tab);
-            System.out.println(arch);
+            System.out.println(arch);//este tiene tiene la informacion en el formato de los archivos
+            //cuando necesite mostrar en la interfaz la solucion solo tiene que llamar a una funcion
+            //que convierta el arcivo a un tablero en la interfaz
             long fin=System.nanoTime();
             System.out.println(grafico.getStartTime()/1000000);
             System.out.println(fin/1000000);
