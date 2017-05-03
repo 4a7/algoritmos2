@@ -93,7 +93,7 @@ public class BT2 extends RecursiveTask<Void>{
             }
             */
             
-            System.out.println("pq");
+            
             return ;
         }
         casillaMatriz cm=t.getCasillaMatriz(i, j);
@@ -191,7 +191,7 @@ public class BT2 extends RecursiveTask<Void>{
                     //t.toString();
                     //System.out.println(forks_hilos+" "+forks);
                     if((Thread.activeCount()<forks_hilos&&!forks)||forks_hilos>1){
-                        System.out.println(forks_hilos);
+                        //System.out.println(forks_hilos);
                         if(forks){
                             //mientras no se tengan forks
                             //System.out.println("FORKS "+forks_hilos);
