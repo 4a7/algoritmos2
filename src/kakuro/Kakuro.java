@@ -18,7 +18,7 @@ public class Kakuro {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+        System.out.println(Thread.activeCount());
         Informacion info =new Informacion();
         Tablero t=new Tablero();
         //BT2 bt2=new BT2();
@@ -45,11 +45,13 @@ public class Kakuro {
         //new BT().solve(0,0, t);
         
  
+        //Ventana v=new Ventana();
         
-        new BT2(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico,"").solve();
+        //new BT2(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico,"",v).solve();
        //new BT2().solve(0, 0, t,presencia_filas,presencia_columnas,suma_filas,suma_columnas,"",grafico);
         
-        //System.out.println(t.toString());
+        System.out.println("que");
+        System.out.println(Thread.activeCount());
        /*
         int[]suma_filas=new int[14];
         for(int i=0;i<4;i++){
@@ -63,13 +65,5 @@ public class Kakuro {
             System.out.println(suma_filas[i]);
         }
         */
-    }
-    
-    public static void a (int[]a){
-        for(int i=0;i<10;i++){
-            a[i]=-45;
-        }
-    }
-
-    
+    } 
 }
