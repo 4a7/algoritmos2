@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Random;
 import javax.swing.AbstractButton;
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
@@ -178,7 +179,9 @@ public class Ventana extends javax.swing.JFrame {
             System.out.println("Solucionar");
             Solucionar();
         });
-        
+
+        JMenu opcionesParalelismo = new JMenu("Paralismo");
+        opcionesGenerar.setMnemonic(KeyEvent.VK_O);
         
         
         group = new ButtonGroup();
@@ -186,19 +189,19 @@ public class Ventana extends javax.swing.JFrame {
         rbMenuItem.setSelected(true);
         rbMenuItem.setMnemonic(KeyEvent.VK_R);
         group.add(rbMenuItem);
-        opcionesSolucionar.add(rbMenuItem);
+        opcionesParalelismo.add(rbMenuItem);
 
         rbMenuItem = new JRadioButtonMenuItem("Hilos");
         rbMenuItem.setMnemonic(KeyEvent.VK_O);
         group.add(rbMenuItem);
-        opcionesSolucionar.add(rbMenuItem);
+        opcionesParalelismo.add(rbMenuItem);
         rbMenuItem = new JRadioButtonMenuItem("Forks");
         rbMenuItem.setMnemonic(KeyEvent.VK_O);
         group.add(rbMenuItem);
-        opcionesSolucionar.add(rbMenuItem);
+        opcionesParalelismo.add(rbMenuItem);
         
         //paralelismo.add(paralelismo_serial);
-        opcionesSolucionar.addSeparator();
+        opcionesParalelismo.addSeparator();
         
         submenu = new JMenu("# de hilos/forks: "+Integer.toString(forks_hilos));
         submenu.setMnemonic(KeyEvent.VK_S);
@@ -274,8 +277,8 @@ public class Ventana extends javax.swing.JFrame {
         submenu.add(mas10);
         submenu.add(mas100);
         
-        opcionesSolucionar.add(submenu);
-        opcionesSolucionar.addSeparator();
+        opcionesParalelismo.add(submenu);
+        //opcionesSolucionar.addSeparator();
         
         
         
@@ -286,17 +289,30 @@ public class Ventana extends javax.swing.JFrame {
         
         menubar.add(opcionesGenerar);
         menubar.add(opcionesSolucionar);
+        menubar.add(opcionesParalelismo);
         setJMenuBar(menubar);
-        Border border = BorderFactory.createLineBorder(Color.WHITE, 1);
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+        
         for(int i=0;i<tamano_x;i++){
             for(int j=0;j<tamano_y;j++){
-                numeros[i][j]=new JLabel("|",SwingConstants.CENTER);
+                Random rand = new Random(); 
+                int value = rand.nextInt(50); 
+                numeros[i][j]=new JLabel(" ",SwingConstants.CENTER);//■
                 numeros[i][j].setOpaque(true);
-                numeros[i][j].setBackground(Color.BLACK);
-                numeros[i][j].setForeground(Color.white);
+                numeros[i][j].setBorder(border);
                 numeros[i][j].setMinimumSize(new Dimension(5, 5));
                 numeros[i][j].setMaximumSize(new Dimension(5, 5));
-                numeros[i][j].setBorder(border);
+                if(value<25){
+                    numeros[i][j].setBackground(Color.BLACK);
+                    numeros[i][j].setForeground(Color.white);
+                }
+                else{
+                    numeros[i][j].setBackground(Color.WHITE);
+                    numeros[i][j].setForeground(Color.BLACK);
+                }
+                
+                
+                
                 panel.add(numeros[i][j]);
             }
         }
