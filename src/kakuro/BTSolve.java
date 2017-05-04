@@ -41,26 +41,27 @@ public class BTSolve {
                 negras[i][j]=true;
                 blancas[i][j]=false;
                 instrucciones[i][j]=false;
-                solve(i,j+1,deepcopy(negras),deepcopy(blancas),deepcopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
+                solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
             }
             else{
+                //primer fila, no primera columna
                 for(int k=0;k<2;k++){
                     //k=1, prueba con una negra
                     //k=2, prueba con una instruccion
-                    if(k==1){
+                    if(k==0){
                         negras[i][j]=true;
                         blancas[i][j]=false;
                         instrucciones[i][j]=false;
-                        solve(i,j+1,deepcopy(negras),deepcopy(blancas),deepcopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
+                        solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
                     }
-                    else if (k==2){
+                    else if (k==1){
                         negras[i][j]=false;
                         blancas[i][j]=false;
                         instrucciones[i][j]=true;
                         instruccionderecha[i][j]=0;
                         for(int w=3;w<46;w++){
                             instruccionabajo[i][j]=w;
-                            solve(i,j+1,deepcopy(negras),deepcopy(blancas),deepcopy(instrucciones),deepcopy(instruccionesderecha),deepcopy(instruccionabajo));
+                            solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepCopy(instruccionesderecha),deepcopy(instruccionabajo));
                             instruccionabajo[i][j]=0;
                         }
                         
@@ -71,6 +72,39 @@ public class BTSolve {
         }
         
         else{
+            //no es la primer fila
+            if(j==0){
+                //si es la primera columna
+                negras[i][j]=true;
+                blancas[i][j]=false;
+                instrucciones[i][j]=true;
+                solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
+            }
+            else{
+                //no primera columna
+                for(int k=0;k<2;k++){
+                    //k=1, prueba con una negra
+                    //k=2, prueba con una instruccion
+                    if(k==0){
+                        negras[i][j]=true;
+                        blancas[i][j]=false;
+                        instrucciones[i][j]=false;
+                        solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepcopy(instruccionderecha),deepcopy(instruccionabajo));
+                    }
+                    else if (k==1){
+                        negras[i][j]=false;
+                        blancas[i][j]=false;
+                        instrucciones[i][j]=true;
+                        instruccionderecha[i][j]=0;
+                        for(int w=3;w<46;w++){
+                            instruccionabajo[i][j]=w;
+                            solve(i,j+1,deepCopy(negras),deepCopy(blancas),deepCopy(instrucciones),deepCopy(instruccionesderecha),deepcopy(instruccionabajo));
+                            instruccionabajo[i][j]=0;
+                        }
+                        
+                        
+                    }
+                }
             
             
             
@@ -82,12 +116,34 @@ public class BTSolve {
             
             
             
+            
+            }
+        
+        
+        
+        
+        
         }
-        
-        
-        
-        
-        
+    
+    }
+    public static boolean[][]deepCopy(boolean[][]arreglo){
+        boolean[][]salida=new boolean[14][14];
+        for(int i=0;i<14;i++){
+            for(int j=0;j<14;j++){
+                salida[i][j]=arreglo[i][j];
+            }
+        }
+        return salida;
+    }
+    
+     public static int[][]deepCopy(int[][]arreglo){
+        int[][]salida=new int[14][14];
+        for(int i=0;i<14;i++){
+            for(int j=0;j<14;j++){
+                salida[i][j]=arreglo[i][j];
+            }
+        }
+        return salida;
     }
     
 }
