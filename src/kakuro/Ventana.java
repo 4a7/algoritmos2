@@ -144,6 +144,29 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     public void Generar(){
+        String seleccionado="Secuencial";
+        for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                seleccionado=button.getText();
+            }
+        }
+        if(seleccionado.equals("Forks")){
+            forks=true;
+        }
+        else if(seleccionado.equals("Hilos")){
+            forks=false;
+            
+        }
+        else{
+            forks=false;
+            forks_hilos=1;
+        }
+        
+        if(forks_hilos<=0){
+            forks_hilos=1;
+        }
         new Thread(new Runnable() {
             public void run() {
                  System.out.println("Generando");
@@ -168,7 +191,7 @@ public class Ventana extends javax.swing.JFrame {
         generar.setToolTipText("Generar un Kakuro");
         generar.addActionListener((ActionEvent event) -> {
             System.out.println("Generar");
-            Solucionar();
+            Generar();
         });
         
         
