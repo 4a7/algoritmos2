@@ -14,8 +14,11 @@ public class BT{
     Grafico grafico=new Grafico();
     int[] sumaFila=new int[14];
     int[] sumaCol=new int[14];
+    int[] objetivoFila=new int[14];
+    int[] objetivoCol=new int[14];
     boolean[][] presenciaFila=new boolean[14][9];
     boolean[][] presenciaCol=new boolean[14][9];
+    
     boolean abajo,siguiente;
     int ix,iy;
     public BT(int ix,int iy){
@@ -27,13 +30,16 @@ public class BT{
         boolean a=false;
         //t=(Tablero)ThreadBT.deepClone(t);
         boolean condicion1,condicion2,condicion3,condicion4;
-        if(j==iy && i==ix){
-            return true;
-        }
+        //System.out.println(i+" "+ix+" "+j+" "+iy);
         if(j==14){
             j=0;
             i++;
         }
+        if(/*(j==iy-1 && i==ix)||(j==13&&i==ix-1&&iy==0)*/(j==iy+1&&i==ix)||(iy==13&&j==0&&ix+1==i)/**//*i==ix&&j==iy*/){
+            //System.out.println(i+" "+j);
+            return true;
+        }
+        
         if(i==14){
             
             
@@ -44,7 +50,10 @@ public class BT{
         if(negras[i][j]){      //no se le tiene que poner un valor
             sumaFila[i]=0;
             sumaCol[j]=0;
-            
+            for(int k=0;k<9;k++){
+                presenciaFila[i][k]=false;
+                presenciaCol[j][k]=false;
+            }
            
             a=a||solve(i,j+1,negras,blancas,instrucciones,instruccionDerecha,instruccionAbajo);
             
@@ -52,42 +61,62 @@ public class BT{
         else if(instrucciones[i][j]){
             sumaFila[i]=0;
             sumaCol[j]=0;
+            objetivoFila[i]=instruccionDerecha[i][j];
+            objetivoCol[j]=instruccionAbajo[i][j];
             for(int k=0;k<9;k++){
                 presenciaFila[i][k]=false;
-                presenciaCol[i][k]=false;
+                presenciaCol[j][k]=false;
             }
             a=a||solve(i,j+1,negras,blancas,instrucciones,instruccionDerecha,instruccionAbajo);
         }
-        else{
-            if(i!=13){
+        else if (blancas[i][j]){
+            
+            if(i<ix||(i==ix-1&&j<iy)){
                 abajo = blancas[i+1][j];
                
             }else{
-                abajo=false;
+                //System.out.println("at");
+                abajo=true;
             }
-            if(j!=13){
+            if(j<13){
+                siguiente=blancas[i][j+1];
+            }
+            else{
+                siguiente=false;
+            }
+            if(i==ix&&j==iy){
+                //System.out.println("st");
+                siguiente=true;
+            }
+            
+            /*
+            
+            if(j<iy){
                 siguiente = blancas[i][j+1];
             }else{
-                siguiente=false;
+                siguiente=true;
       
             }
+            */
+            
+            //System.out.println("objetivos "+objetivoFila[i]+" "+objetivoCol[j]);
             
             for(int k=0;k<9;k++){
                         //System.out.println("Numero: "+i+" "+j+" "+k);
 
-                condicion1=!(presenciaCol[i][k]);
-                condicion2=!(presenciaFila[j][k]);
+                condicion1=!(presenciaCol[j][k]);
+                condicion2=!(presenciaFila[i][k]);
                 if(siguiente){
-                    condicion3=(instruccionDerecha[i][j]>sumaFila[i]+k+1);
+                    condicion3=(objetivoFila[i]>sumaFila[i]+k+1);
                 }
                 else{
-                    condicion3=(instruccionDerecha[i][j]==sumaFila[i]+k+1);
+                    condicion3=(objetivoFila[i]==sumaFila[i]+k+1);
                 }
                 if(abajo){
-                    condicion4=(instruccionAbajo[i][j]>sumaCol[j]+k+1);
+                    condicion4=(objetivoCol[j]>sumaCol[j]+k+1);
                 }
                 else{
-                    condicion4=(instruccionAbajo[i][j]==sumaCol[j]+k+1);
+                    condicion4=(objetivoCol[j]==sumaCol[j]+k+1);
                   
                 }
                 //System.out.println("ID: "+t.getSuma(i, j).getDerecha()+" Numero: "+i+" "+j+" "+k+" Sumas: d/a "+t.getSuma(i, j).getObjetivoDerecha()+" "+t.getSuma(i, j).getObjetivoAbajo()+" "+t.getSuma(i, j).getActualDerecha()+" "+t.getSuma(i, j).getActualAbajo()+/*t.getSuma(i, j)+" "+info.getSumaHorizontal(i)+" "+k+*/"  Condiciones: "+condicion1+" "+condicion2+" "+condicion3+" "+condicion4);
@@ -96,7 +125,7 @@ public class BT{
                     sumaCol[j]+=k+1;
                     sumaFila[i]+=k+1;
                     presenciaFila[i][k]=true;
-                    presenciaCol[i][k]=true;
+                    presenciaCol[j][k]=true;
                     //t.setCasillaMatriz(i, j, k);
                     //System.out.println("TABLERO: "+i+" "+j);
                     //t.toString();
@@ -108,12 +137,16 @@ public class BT{
                     sumaCol[j]-=k+1;
                     sumaFila[i]-=k+1;
                     presenciaFila[i][k]=false;
-                    presenciaCol[i][k]=true;
+                    presenciaCol[j][k]=false;
                 }
 
             }
             
-        } 
+        }
+        else{
+            System.out.println("juajuajua********"+i+" "+j+" "+ix+" "+iy);
+            //return true;
+        }
         return a;
     }
     
