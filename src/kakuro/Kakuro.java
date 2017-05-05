@@ -16,8 +16,9 @@ public class Kakuro {
     /**
      * @param args the command line arguments
      */
-    public  void main(String[] args) {
+    public  static void main(String[] args) {
         // TODO code application logic here
+        /*
         System.out.println(Thread.activeCount());
         Informacion info =new Informacion();
         Tablero t=new Tablero();
@@ -65,5 +66,6 @@ public class Kakuro {
             System.out.println(suma_filas[i]);
         }
         */
+        new BTSolve();
     } 
 }
