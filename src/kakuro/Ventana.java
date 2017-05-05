@@ -167,8 +167,24 @@ public class Ventana extends javax.swing.JFrame {
         if(forks_hilos<=0){
             forks_hilos=1;
         }
+        BTSolve.setForks(forks);
+        if(forks_hilos>0){
+            BTSolve.setForks_hilos(forks_hilos);
+            
+        }
+        else{
+            BTSolve.setForks_hilos(1);
+        }
+        boolean [][] negras=new boolean[14][14];
+        boolean [][] blancas=new boolean[14][14];
+        boolean [][] instrucciones=new boolean[14][14];
+        int[][] instruccionderecha=new int[14][14];
+        int[][] instruccionabajo=new int[14][14];
+        Grafico g=new Grafico();
+        Ventana v=this;
         new Thread(new Runnable() {
             public void run() {
+                new BTSolve(0,0,negras,blancas,instrucciones,instruccionderecha,instruccionabajo,g,v).solve();
                  System.out.println("Generando");
             }
        }).start();
