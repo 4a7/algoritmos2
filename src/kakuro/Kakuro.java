@@ -16,7 +16,8 @@ public class Kakuro {
     /**
      * @param args the command line arguments
      */
-    public  static void main(String[] args) {
+    public  void main(String[] args) {
+        System.out.println("hola");
         // TODO code application logic here
         /*
         System.out.println(Thread.activeCount());
@@ -66,6 +67,15 @@ public class Kakuro {
             System.out.println(suma_filas[i]);
         }
         */
-        new BTSolve();
+        boolean [][] negras=new boolean[14][14];
+        boolean [][] blancas=new boolean[14][14];
+        boolean [][] instrucciones=new boolean[14][14];
+        int[][] instruccionderecha=new int[14][14];
+        int[][] instruccionabajo=new int[14][14];
+        Grafico g=new Grafico();
+        
+        BTSolve.setForks(true);
+       BTSolve.setForks_hilos(2);
+        //new BTSolve(0,0,negras,blancas,instrucciones,instruccionderecha,instruccionabajo,g).solve();
     } 
 }
